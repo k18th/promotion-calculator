@@ -9,5 +9,6 @@ try{
  $code=preg_replace('/\D/','',(string)($in['code']??''));if(strlen($code)!==4)throw new Exception('رقم الزائر يجب أن يكون 4 خانات.');$s=$pdo->prepare('SELECT id,calculator_data,return_count FROM visitors WHERE visitor_code=?');$s->execute([$code]);$v=$s->fetch();
  if($a==='restore'){logEvent($pdo,$v?(int)$v['id']:null,$code,'search',['found'=>(bool)$v]);if(!$v)throw new Exception('رقم الزائر غير موجود.');$pdo->prepare('UPDATE visitors SET return_count=return_count+1 WHERE id=?')->execute([$v['id']]);logEvent($pdo,(int)$v['id'],$code,'restore');echo json_encode(['ok'=>true,'code'=>$code,'data'=>json_decode($v['calculator_data'],true)]);exit;}
  if($a==='save'){if(!$v)throw new Exception('رقم الزائر غير موجود.');$pdo->prepare('UPDATE visitors SET calculator_data=? WHERE id=?')->execute([json_encode($in['data']??[],JSON_UNESCAPED_UNICODE),$v['id']]);logEvent($pdo,(int)$v['id'],$code,'save');echo json_encode(['ok'=>true]);exit;}
+ if($a==='logout'){if($v)logEvent($pdo,(int)$v['id'],$code,'logout');echo json_encode(['ok'=>true]);exit;}
  throw new Exception('طلب غير معروف.');
 }catch(Throwable $e){http_response_code(400);echo json_encode(['ok'=>false,'message'=>$e->getMessage()],JSON_UNESCAPED_UNICODE);}
