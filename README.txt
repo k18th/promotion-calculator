@@ -1,9 +1,9 @@
 خطوات التثبيت:
 1) أنشئ قاعدة MySQL من لوحة Hostinger.
-2) استورد schema.sql عبر phpMyAdmin.
-3) انسخ config.example.php إلى config.php وأدخل بيانات القاعدة.
-4) ولّد كلمة مرور الإدارة بأمر PHP: password_hash('YOUR_PASSWORD', PASSWORD_DEFAULT)
-5) ضع الناتج في admin_password_hash.
-6) ارفع محتويات المجلد إلى public_html الخاص بالدومين.
-7) رابط الإدارة: /admin.php
+2) افتح /setup.php وأدخل بيانات القاعدة وبيانات مالك النظام.
+3) ينشئ المعالج الجداول ويحفظ كلمة مرور المالك بصيغة password_hash فقط.
+4) افتح /admin.php وسجل الدخول.
+5) احذف setup.php من مدير الملفات بعد نجاح الإعداد.
 
+رابط الحاسبة: /
+رابط الإدارة: /admin.php

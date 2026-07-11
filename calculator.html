@@ -64,7 +64,7 @@ $$('input[type=number]').forEach(i=>i.addEventListener('input',calc));calc();
 function q(s){return document.querySelector(s)}function qa(s){return document.querySelectorAll(s)}function each(list,fn){for(var i=0;i<list.length;i++)fn(list[i],i)}function clamp(v,a,b){v=parseFloat(v)||0;return Math.min(b,Math.max(a,v))}function pad(n){return n<10?'0'+n:String(n)}
 var performanceValue=null,whole=2,fraction=50,rank='low',dateTarget=null,calendar='hijri',lastTouch=0,trainingCalendar='hijri',trainingPrograms=[];
 var hijriMonths=['محرم','صفر','ربيع الأول','ربيع الآخر','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];var gregMonths=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-function openModal(id){q(id).className+=' open';document.body.style.overflow='hidden'}function closeModal(el){el.className=el.className.replace(/\s*open/g,'');document.body.style.overflow=''}
+function openModal(id){var el=q(id);if(el){el.classList.add('open');document.body.style.overflow='hidden'}}function closeModal(el){if(el){el.classList.remove('open');document.body.style.overflow=''}}
 function paintPerformance(){if(whole===5)fraction=0;if(whole===2&&fraction<50)fraction=50;var w='';for(var n=2;n<=5;n++)w+='<button type="button" class="opt '+(n===whole?'selected':'')+'" data-w="'+n+'">'+n+'</button>';q('#wholeWheel').innerHTML=w;var f='';for(n=0;n<100;n++){var disabled=(whole===2&&n<50)||(whole===5&&n!==0);f+='<button type="button" class="opt '+(n===fraction?'selected':'')+'" data-f="'+n+'" '+(disabled?'disabled':'')+'>'+pad(n)+'</button>'}q('#fractionWheel').innerHTML=f;q('#perfPreview').innerHTML=whole+'.'+pad(fraction)}
 window.openPerformancePicker=function(e){if(e&&e.preventDefault)e.preventDefault();var now=new Date().getTime();if(now-lastTouch<300)return false;lastTouch=now;q('#perfModalTitle').innerHTML='اختر تقييم الأداء';q('#perfRequiredNote').style.display='none';paintPerformance();openModal('#perfModal');return false};
 function requirePerformance(){lastTouch=0;window.openPerformancePicker(null);q('#perfModalTitle').innerHTML='تقييم الأداء مطلوب';q('#perfRequiredNote').style.display='block'}
@@ -95,5 +95,4 @@ function restoreState(){try{var raw=localStorage.getItem('promotionCalculatorDat
 each(qa('input[type=number]'),function(i){i.oninput=function(){if(i.id==='initProp'||i.id==='initExec'){if(parseFloat(i.value)>100)i.value=100;if(i.value!==''&&parseFloat(i.value)<1)i.value=1}};i.onchange=saveState;i.onblur=saveState});each(qa('input[type=checkbox]'),function(i){i.onchange=function(){syncParticipation();saveState()}});restoreState();
 })();
 </script></body></html>
-
 
