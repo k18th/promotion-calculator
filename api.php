@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');header('Cache-Control: no-store');
+if(!is_file(__DIR__.'/config.php')){http_response_code(503);echo json_encode(['ok'=>false,'message'=>'قاعدة البيانات غير مهيأة. افتح setup.php لإكمال الإعداد.'],JSON_UNESCAPED_UNICODE);exit;}
 [$pdo,$c]=require __DIR__.'/db.php';$in=json_decode(file_get_contents('php://input'),true)?:[];$a=$in['action']??'';
 function logEvent(PDO $p,?int $id,?string $code,string $type,array $data=[]):void{$s=$p->prepare('INSERT INTO visitor_events(visitor_id,visitor_code,event_type,event_data) VALUES(?,?,?,?)');$s->execute([$id,$code,$type,json_encode($data,JSON_UNESCAPED_UNICODE)]);}
 try{
@@ -10,4 +11,3 @@ try{
  if($a==='save'){if(!$v)throw new Exception('رقم الزائر غير موجود.');$pdo->prepare('UPDATE visitors SET calculator_data=? WHERE id=?')->execute([json_encode($in['data']??[],JSON_UNESCAPED_UNICODE),$v['id']]);logEvent($pdo,(int)$v['id'],$code,'save');echo json_encode(['ok'=>true]);exit;}
  throw new Exception('طلب غير معروف.');
 }catch(Throwable $e){http_response_code(400);echo json_encode(['ok'=>false,'message'=>$e->getMessage()],JSON_UNESCAPED_UNICODE);}
-
